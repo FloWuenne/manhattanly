@@ -185,6 +185,8 @@ manhattanly.manhattanr <- function(x,
   
   #########
   
+  library(plotly)
+  
   d <- x$data
   pName <- x$pName
   snpName <- x$snpName
@@ -262,10 +264,8 @@ manhattanly.manhattanr <- function(x,
   }
   
   # Create a vector of alternatiting colors
-  col <- brewer.pal(n = unique(d$group), name = "Set1")
+  col <- brewer.pal(n = length(unique(d$group)), name = "Set1")
 
-  
-  
   # Add points to the plot
   if (nchr==1) {
     
@@ -280,63 +280,116 @@ manhattanly.manhattanr <- function(x,
                   if (!is.na(annotation2Name)) paste0(annotation2Name,": ",d[[annotation2Name]]), sep = "<br>")
     
     if (is.na(snpName) && is.na(geneName) && is.na(annotation1Name) && is.na(annotation2Name)) {
-      p %<>% plotly::add_trace(x = d$pos, y = d$logp, color = ~ d$group,
+      
+
+       
+      p %<>% plotly::add_trace(data = d, x = d$pos, y = d$logp, color = ~group, colors = "Set1",
                                type = "scatter",
                                mode = "markers",
                                # text = TEXT,
                                showlegend = showlegend,
-                               marker = list(color = col,
-                                             size = point_size),
-                               name = paste0("chr", unique(d$CHR))) 
+                               marker = list(size = point_size)
+                               #name = paste0("chr", unique(d$CHR))
+                               )
     } else {
       
-      p %<>% plotly::add_trace(x = d$pos, y = d$logp, color = ~ d$group,
+      p %<>% plotly::add_trace(data = d, x = d$pos, y = d$logp, color = ~group, colors = "Set1",
                                type = "scatter",
                                mode = "markers",
                                text = TEXT,
                                showlegend = showlegend,
-                               marker = list(color = col,
-                                             size = point_size),
-                               name = paste0("chr", unique(d$CHR)))         
+                               marker = list(size = point_size)
+                               #name = paste0("chr", unique(d$CHR))
+                               )         
     }
     
   } else {
     
-    icol <- 1
+    #icol <- 1
     
-    for(i in unique(d$index)) {
-      
-      tmp <- d[d$index == unique(d$index)[i], ]
-      
-      TEXT <- paste(if (!is.na(snpName)) paste0(snpName,": ", tmp[[snpName]]),
-                    if (!is.na(geneName)) paste0(geneName,": ", tmp[[geneName]]),
-                    if (!is.na(annotation1Name)) paste0(annotation1Name,": ", tmp[[annotation1Name]]),
-                    if (!is.na(annotation2Name)) paste0(annotation2Name,": ", tmp[[annotation2Name]]),
-                    sep = "<br>")
-      
-      # get chromosome name for labeling
-      chromo <- unique(tmp[which(tmp$index==i),"CHR"])
-      
+    # for(i in unique(d$index)) {
+    # 
+    #   tmp <- d[d$index == unique(d$index)[i], ]
+    # 
+    #   TEXT <- paste(if (!is.na(snpName)) paste0(snpName,": ", tmp[[snpName]]),
+    #                 if (!is.na(geneName)) paste0(geneName,": ", tmp[[geneName]]),
+    #                 if (!is.na(annotation1Name)) paste0(annotation1Name,": ", tmp[[annotation1Name]]),
+    #                 if (!is.na(annotation2Name)) paste0(annotation2Name,": ", tmp[[annotation2Name]]),
+    #                 sep = "<br>")
+    # 
+    #   # get chromosome name for labeling
+    #   chromo <- unique(tmp[which(tmp$index==i),"CHR"])
+
       if (is.na(snpName) && is.na(geneName) && is.na(annotation1Name) && is.na(annotation2Name)) {
-        p %<>% plotly::add_trace(x = tmp$pos, y = tmp$logp, type = "scatter", color = ~ d$group,
-                                 mode = "markers", 
-                                 showlegend = showlegend,
-                                 marker = list(color = col,
-                                               size = point_size),
-                                 name = paste0("chr",chromo)) 
+
+        p <- d %>%
+          group_by(group) %>%
+          plot_ly(x = ~pos , color = ~group, colors = "Set1") %>%
+          add_trace(y = ~logp,
+                    showlegend = showlegend,
+                    type = "scatter",
+                    mode = "markers",
+                    marker = list(size = point_size)) %>%
+          plotly::layout(title = title,
+                         xaxis = list(
+                           title = if(!is.null(xlab)) xlab else "Chromosome",
+                           # title = "ll",
+                           showgrid = showgrid,
+                           range = c(xmin, xmax),
+                           autotick = FALSE,
+                           tickmode = "array",
+                           tickvals = ticks,
+                           ticktext = labs,
+                           ticks = "outside"
+                         ),
+                         yaxis = list(
+                           title = ylab))
+        
+        ## Old original code
+        # p %<>% plotly::add_trace(data =tmp, x = tmp$pos, y = tmp$logp, type = "scatter", color = ~group, colors = "Set1",
+        #                          type = "scatter",
+        #                          mode = "markers", 
+        #                          showlegend = showlegend,
+        #                          marker = list(size = point_size),
+        #                          legendgroup=~group) 
+        
       } else {
         
-        p %<>% plotly::add_trace(x = tmp$pos, y = tmp$logp, type = "scatter", color = ~ d$group,
-                                 mode = "markers", 
-                                 showlegend = showlegend,
-                                 text = TEXT,
-                                 marker = list(color = col,
-                                               size = point_size),
-                                 name = paste0("chr",chromo))        
+        p <- d %>%
+          group_by(group) %>%
+          plot_ly(x = ~pos , color = ~group, colors = "Set1") %>%
+          add_trace(y = ~logp,
+                    showlegend = showlegend,
+                    type = "scatter",
+                    mode = "markers",
+                    text = TEXT,
+                    marker = list(size = point_size)) %>%
+          plotly::layout(title = title,
+                         xaxis = list(
+                           title = if(!is.null(xlab)) xlab else "Chromosome",
+                           # title = "ll",s
+                           showgrid = showgrid,
+                           range = c(xmin, xmax),
+                           autotick = FALSE,
+                           tickmode = "array",
+                           tickvals = ticks,
+                           ticktext = labs,
+                           ticks = "outside"
+                         ),
+                         yaxis = list(
+                           title = ylab))
+        
+        # p %<>% plotly::add_trace(data =tmp, x = tmp$pos, y = tmp$logp, type = "scatter", color = ~group, colors = "Set1",
+        #                          type = "scatter",
+        #                          mode = "markers", 
+        #                          showlegend = showlegend,
+        #                          text = TEXT,
+        #                          marker = list(size = point_size),
+        #                          legendgroup=~group)        
       }
       
       icol = icol + 1
-    }
+    #}
     
   }
   
