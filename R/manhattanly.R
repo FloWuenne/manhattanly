@@ -311,10 +311,10 @@ manhattanly.manhattanr <- function(x,
     # 
     #   tmp <- d[d$index == unique(d$index)[i], ]
     # 
-      TEXT <- paste(if (!is.na(snpName)) paste0(snpName,": ", tmp[[snpName]]),
-                    if (!is.na(geneName)) paste0(geneName,": ", tmp[[geneName]]),
-                    if (!is.na(annotation1Name)) paste0(annotation1Name,": ", tmp[[annotation1Name]]),
-                    if (!is.na(annotation2Name)) paste0(annotation2Name,": ", tmp[[annotation2Name]]),
+      TEXT <- paste(if (!is.na(snpName)) paste0(snpName,": ", d[[snpName]]),
+                    if (!is.na(geneName)) paste0(geneName,": ", d[[geneName]]),
+                    if (!is.na(annotation1Name)) paste0(annotation1Name,": ", d[[annotation1Name]]),
+                    if (!is.na(annotation2Name)) paste0(annotation2Name,": ", d[[annotation2Name]]),
                     sep = "<br>")
 
       # # get chromosome name for labeling
