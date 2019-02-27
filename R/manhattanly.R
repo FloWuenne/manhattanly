@@ -305,7 +305,6 @@ manhattanly.manhattanr <- function(x,
     
   } else {
     
-    #icol <- 1
     
     # for(i in unique(d$index)) {
     # 
@@ -388,7 +387,6 @@ manhattanly.manhattanr <- function(x,
         #                          legendgroup=~group)        
       }
       
-      icol = icol + 1
     #}
     
   }
