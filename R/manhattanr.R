@@ -84,6 +84,7 @@ manhattanr <- function(x,
                        chr = "CHR",
                        bp = "BP",
                        p = "P",
+                       grouping_var = "group",
                        snp,
                        gene,
                        annotation1,
@@ -132,9 +133,10 @@ manhattanr <- function(x,
   if (!is.numeric(x[[chr]])) stop(paste(chr, "column should be numeric. Do you have 'X', 'Y', 'MT', etc? If so change to numbers and try again."))
   if (!is.numeric(x[[bp]])) stop(paste(bp, "column should be numeric."))
   if (!is.numeric(x[[p]])) stop(paste(p, "column should be numeric."))
+  if (!is.character(x[[grouping_var]])) stop(paste(grouping_var, "column should be a character vector"))
   
   # Create a new data.frame with columns called CHR, BP, and P.
-  d <- data.frame(CHR = x[[chr]], BP = x[[bp]], P = x[[p]])
+  d <- data.frame(CHR = x[[chr]], BP = x[[bp]], P = x[[p]], group = x[[grouping_var]])
   # str(d)
   # If the input data frame has a SNP column, add it to the new data frame
   # you're creating. Rename columns according to input
@@ -222,7 +224,7 @@ manhattanr <- function(x,
   }
   
   manhattanr <- list(data = d, xlabel = xlabel, ticks = ticks, labs = labs,
-                     nchr = nchr, pName = p,
+                     nchr = nchr, pName = p, group = "group",
                      snpName = if (missing(snp)) NA else snp,
                      geneName = if (missing(gene)) NA else gene,
                      annotation1Name = if (missing(annotation1)) NA else annotation1,

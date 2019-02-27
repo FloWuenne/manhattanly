@@ -195,6 +195,7 @@ manhattanly.manhattanr <- function(x,
   xlabel <- x$xlabel
   ticks <- x$ticks
   nchr <- x$nchr
+  group_var <- x$group
   
   if (!is.null(highlight) & is.na(snpName)) stop("You're trying to highlight snps, but havent provided a snp column")
   
@@ -261,7 +262,12 @@ manhattanly.manhattanr <- function(x,
   }
   
   # Create a vector of alternatiting colors
-  col <- rep(col, max(d$CHR))
+  # if(is.na(grouping_var)){
+    col <- rep(col, max(d$CHR))
+  # }else{
+  #   col <- brewer.pal(n = unique(), name = "Set2")
+  # }
+  
   
   # Add points to the plot
   if (nchr==1) {
@@ -282,7 +288,7 @@ manhattanly.manhattanr <- function(x,
                                mode = "markers",
                                # text = TEXT,
                                showlegend = showlegend,
-                               marker = list(color = col[1],
+                               marker = list(d$group,
                                              size = point_size),
                                name = paste0("chr", unique(d$CHR))) 
     } else {
@@ -292,7 +298,7 @@ manhattanly.manhattanr <- function(x,
                                mode = "markers",
                                text = TEXT,
                                showlegend = showlegend,
-                               marker = list(color = col[1],
+                               marker = list(d$group,
                                              size = point_size),
                                name = paste0("chr", unique(d$CHR)))         
     }
@@ -318,7 +324,7 @@ manhattanly.manhattanr <- function(x,
         p %<>% plotly::add_trace(x = tmp$pos, y = tmp$logp, type = "scatter",
                                  mode = "markers", 
                                  showlegend = showlegend,
-                                 marker = list(color = col[icol],
+                                 marker = list(color = d$group,
                                                size = point_size),
                                  name = paste0("chr",chromo)) 
       } else {
@@ -327,7 +333,7 @@ manhattanly.manhattanr <- function(x,
                                  mode = "markers", 
                                  showlegend = showlegend,
                                  text = TEXT,
-                                 marker = list(color = col[icol],
+                                 marker = list(color = d$group,
                                                size = point_size),
                                  name = paste0("chr",chromo))        
       }
