@@ -262,11 +262,8 @@ manhattanly.manhattanr <- function(x,
   }
   
   # Create a vector of alternatiting colors
-  # if(is.na(grouping_var)){
-    col <- rep(col, max(d$CHR))
-  # }else{
-  #   col <- brewer.pal(n = unique(), name = "Set2")
-  # }
+  col <- brewer.pal(n = unique(d$group), name = "Set1")
+
   
   
   # Add points to the plot
@@ -283,22 +280,22 @@ manhattanly.manhattanr <- function(x,
                   if (!is.na(annotation2Name)) paste0(annotation2Name,": ",d[[annotation2Name]]), sep = "<br>")
     
     if (is.na(snpName) && is.na(geneName) && is.na(annotation1Name) && is.na(annotation2Name)) {
-      p %<>% plotly::add_trace(x = d$pos, y = d$logp,
+      p %<>% plotly::add_trace(x = d$pos, y = d$logp, color = ~ d$group,
                                type = "scatter",
                                mode = "markers",
                                # text = TEXT,
                                showlegend = showlegend,
-                               marker = list(d$group,
+                               marker = list(color = col,
                                              size = point_size),
                                name = paste0("chr", unique(d$CHR))) 
     } else {
       
-      p %<>% plotly::add_trace(x = d$pos, y = d$logp,
+      p %<>% plotly::add_trace(x = d$pos, y = d$logp, color = ~ d$group,
                                type = "scatter",
                                mode = "markers",
                                text = TEXT,
                                showlegend = showlegend,
-                               marker = list(d$group,
+                               marker = list(color = col,
                                              size = point_size),
                                name = paste0("chr", unique(d$CHR)))         
     }
@@ -321,19 +318,19 @@ manhattanly.manhattanr <- function(x,
       chromo <- unique(tmp[which(tmp$index==i),"CHR"])
       
       if (is.na(snpName) && is.na(geneName) && is.na(annotation1Name) && is.na(annotation2Name)) {
-        p %<>% plotly::add_trace(x = tmp$pos, y = tmp$logp, type = "scatter",
+        p %<>% plotly::add_trace(x = tmp$pos, y = tmp$logp, type = "scatter", color = ~ d$group,
                                  mode = "markers", 
                                  showlegend = showlegend,
-                                 marker = list(color = d$group,
+                                 marker = list(color = col,
                                                size = point_size),
                                  name = paste0("chr",chromo)) 
       } else {
         
-        p %<>% plotly::add_trace(x = tmp$pos, y = tmp$logp, type = "scatter",
+        p %<>% plotly::add_trace(x = tmp$pos, y = tmp$logp, type = "scatter", color = ~ d$group,
                                  mode = "markers", 
                                  showlegend = showlegend,
                                  text = TEXT,
-                                 marker = list(color = d$group,
+                                 marker = list(color = col,
                                                size = point_size),
                                  name = paste0("chr",chromo))        
       }
