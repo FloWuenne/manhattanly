@@ -191,6 +191,8 @@ manhattanly.manhattanr <- function(x,
   geneName <- x$geneName
   annotation1Name <- x$annotation1Name
   annotation2Name <- x$annotation2Name
+  annotation3Name <- x$annotation3Name
+  annotation4Name <- x$annotation4Name
   labs <- x$labs
   xlabel <- x$xlabel
   ticks <- x$ticks
@@ -274,9 +276,11 @@ manhattanly.manhattanr <- function(x,
     TEXT <- paste(if (!is.na(snpName)) paste0(snpName,": ",d[[snpName]]),
                   if (!is.na(geneName)) paste0(geneName,": ",d[[geneName]]),
                   if (!is.na(annotation1Name)) paste0(annotation1Name,": ",d[[annotation1Name]]),
-                  if (!is.na(annotation2Name)) paste0(annotation2Name,": ",d[[annotation2Name]]), sep = "<br>")
+                  if (!is.na(annotation2Name)) paste0(annotation2Name,": ",d[[annotation2Name]]),
+                  if (!is.na(annotation3Name)) paste0(annotation3Name,": ",d[[annotation3Name]]),
+                  if (!is.na(annotation4Name)) paste0(annotation4Name,": ",d[[annotation4Name]]), sep = "<br>")
     
-    if (is.na(snpName) && is.na(geneName) && is.na(annotation1Name) && is.na(annotation2Name)) {
+    if (is.na(snpName) && is.na(geneName) && is.na(annotation1Name) && is.na(annotation2Name) && is.na(annotation3Name) && is.na(annotation4Name)) {
       p %<>% plotly::add_trace(x = d$pos, y = d$logp,
                                type = "scatter",
                                mode = "markers",
@@ -307,14 +311,16 @@ manhattanly.manhattanr <- function(x,
 
       TEXT <- paste(if (!is.na(snpName)) paste0(snpName,": ", tmp[[snpName]]),
                     if (!is.na(geneName)) paste0(geneName,": ", tmp[[geneName]]),
-                    if (!is.na(annotation1Name)) paste0(annotation1Name,": ", tmp[[annotation1Name]]),
-                    if (!is.na(annotation2Name)) paste0(annotation2Name,": ", tmp[[annotation2Name]]),
+                    if (!is.na(annotation1Name)) paste0(annotation1Name,": ",d[[annotation1Name]]),
+                    if (!is.na(annotation2Name)) paste0(annotation2Name,": ",d[[annotation2Name]]),
+                    if (!is.na(annotation3Name)) paste0(annotation3Name,": ",d[[annotation3Name]]),
+                    if (!is.na(annotation4Name)) paste0(annotation4Name,": ",d[[annotation4Name]]),
                     sep = "<br>")
 
       # get chromosome name for labeling
       chromo <- unique(tmp[which(tmp$index==i),"CHR"])
       
-      if (is.na(snpName) && is.na(geneName) && is.na(annotation1Name) && is.na(annotation2Name)) {
+      if (is.na(snpName) && is.na(geneName) && is.na(annotation1Name) && is.na(annotation2Name) && is.na(annotation3Name) && is.na(annotation4Name)) {
       p %<>% plotly::add_trace(x = tmp$pos, y = tmp$logp, type = "scatter",
                        mode = "markers", 
                        showlegend = showlegend,
@@ -386,8 +392,10 @@ manhattanly.manhattanr <- function(x,
         
         TEXT <- paste(if (!is.na(snpName)) paste0(snpName,": ",d.highlight[[snpName]]),
                       if (!is.na(geneName)) paste0(geneName,": ",d.highlight[[geneName]]),
-                      if (!is.na(annotation1Name)) paste0(annotation1Name,": ",d.highlight[[annotation1Name]]),
-                      if (!is.na(annotation2Name)) paste0(annotation2Name,": ",d.highlight[[annotation2Name]]), sep = "<br>")
+                      if (!is.na(annotation1Name)) paste0(annotation1Name,": ",d[[annotation1Name]]),
+                      if (!is.na(annotation2Name)) paste0(annotation2Name,": ",d[[annotation2Name]]),
+                      if (!is.na(annotation3Name)) paste0(annotation3Name,": ",d[[annotation3Name]]),
+                      if (!is.na(annotation4Name)) paste0(annotation4Name,": ",d[[annotation4Name]]), sep = "<br>")
         
         p %<>% plotly::add_trace(x = d$pos, y = d$logp,
                                  type = "scatter",
@@ -408,8 +416,10 @@ manhattanly.manhattanr <- function(x,
           
           TEXT <- paste(if (!is.na(snpName)) paste0(snpName,": ", tmp[[snpName]]),
                         if (!is.na(geneName)) paste0(geneName,": ", tmp[[geneName]]),
-                        if (!is.na(annotation1Name)) paste0(annotation1Name,": ", tmp[[annotation1Name]]),
-                        if (!is.na(annotation2Name)) paste0(annotation2Name,": ", tmp[[annotation2Name]]),
+                        if (!is.na(annotation1Name)) paste0(annotation1Name,": ",d[[annotation1Name]]),
+                        if (!is.na(annotation2Name)) paste0(annotation2Name,": ",d[[annotation2Name]]),
+                        if (!is.na(annotation3Name)) paste0(annotation3Name,": ",d[[annotation3Name]]),
+                        if (!is.na(annotation4Name)) paste0(annotation4Name,": ",d[[annotation4Name]]),
                         sep = "<br>")
           
           # get chromosome name for labeling

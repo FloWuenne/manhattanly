@@ -88,6 +88,8 @@ manhattanr <- function(x,
                        gene,
                        annotation1,
                        annotation2,
+                       annotation3,
+                       annotation4,
                        logp = TRUE) {
 
   # NULLing out strategy
@@ -124,6 +126,14 @@ manhattanr <- function(x,
 
   if (!missing(annotation2)) {
     if (!(annotation2 %in% names(x))) stop(sprintf("annotation2 argument specified as %s but this column not found in 'x' data.frame", annotation2))
+  }
+  
+  if (!missing(annotation3)) {
+    if (!(annotation3 %in% names(x))) stop(sprintf("annotation3 argument specified as %s but this column not found in 'x' data.frame", annotation3))
+  }
+  
+  if (!missing(annotation4)) {
+    if (!(annotation4 %in% names(x))) stop(sprintf("annotation2 argument specified as %s but this column not found in 'x' data.frame", annotation4))
   }
 
   # if (!(gene %in% names(x))) warning(paste("No GENE column found. OK unless you're trying to annotate."))
@@ -162,6 +172,18 @@ manhattanr <- function(x,
     # d <- transform(d, ANNOTATION2 = x[[annotation2]])
     d[["ANNOTATION2"]] <- x[[annotation2]]
     colnames(d)[which(colnames(d) == "ANNOTATION2")] <- annotation2
+  }
+  
+  if (!missing(annotation3)) {
+    # d <- transform(d, ANNOTATION2 = x[[annotation3]])
+    d[["ANNOTATION3"]] <- x[[annotation3]]
+    colnames(d)[which(colnames(d) == "ANNOTATION3")] <- annotation3
+  }
+  
+  if (!missing(annotation4)) {
+    # d <- transform(d, ANNOTATION2 = x[[annotation4]])
+    d[["ANNOTATION4"]] <- x[[annotation4]]
+    colnames(d)[which(colnames(d) == "ANNOTATION4")] <- annotation4
   }
 
   # Set positions, ticks, and labels for plotting
@@ -226,7 +248,9 @@ manhattanr <- function(x,
                      snpName = if (missing(snp)) NA else snp,
                      geneName = if (missing(gene)) NA else gene,
                      annotation1Name = if (missing(annotation1)) NA else annotation1,
-                     annotation2Name = if (missing(annotation2)) NA else annotation2)
+                     annotation2Name = if (missing(annotation2)) NA else annotation2
+                     annotation3Name = if (missing(annotation3)) NA else annotation3,
+                     annotation4Name = if (missing(annotation4)) NA else annotation4)
 
   class(manhattanr) <- "manhattanr"
 
