@@ -88,61 +88,51 @@ manhattanr <- function(x,
                        gene,
                        annotation1,
                        annotation2,
-                       annotation3,
-                       annotation4,
                        logp = TRUE) {
-
+  
   # NULLing out strategy
   # http://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
   CHR = BP = P = index = NULL
   # dotargs <- list(...)
   # print(dotargs)
   # message(paste(chr, bp, p,snp, gene, dotargs))
-
+  
   # x = HapMap
   # chr = "CHR";
   # bp = "BP";
   # p = "P";
   # snp = "SNP"
-# browser()
+  # browser()
   # Check for sensible dataset
   ## Make sure you have chr, bp and p columns.
   if (!(chr %in% names(x))) stop(paste("Column", chr, "not found in 'x' data.frame"))
   if (!(bp %in% names(x))) stop(paste("Column", bp, "not found in 'x' data.frame"))
   if (!(p %in% names(x))) stop(paste("Column", p, "not found 'x' data.frame"))
-
+  
   ## warn if you don't have a snp column
   if (!missing(snp)) {
     if (!(snp %in% names(x))) stop(sprintf("snp argument specified as %s but this column not found in 'x' data.frame", snp))
   }
-
+  
   if (!missing(gene)) {
     if(!(gene %in% names(x))) stop(sprintf("gene argument specified as %s but this column not found in 'x' data.frame", gene))
   }
-
+  
   if (!missing(annotation1)) {
     if (!(annotation1 %in% names(x))) stop(sprintf("annotation1 argument specified as %s but this column not found in 'x' data.frame", annotation1))
   }
-
+  
   if (!missing(annotation2)) {
     if (!(annotation2 %in% names(x))) stop(sprintf("annotation2 argument specified as %s but this column not found in 'x' data.frame", annotation2))
   }
   
-  if (!missing(annotation3)) {
-    if (!(annotation3 %in% names(x))) stop(sprintf("annotation3 argument specified as %s but this column not found in 'x' data.frame", annotation3))
-  }
-  
-  if (!missing(annotation4)) {
-    if (!(annotation4 %in% names(x))) stop(sprintf("annotation2 argument specified as %s but this column not found in 'x' data.frame", annotation4))
-  }
-
   # if (!(gene %in% names(x))) warning(paste("No GENE column found. OK unless you're trying to annotate."))
-
+  
   ## make sure chr, bp, and p columns are numeric.
   if (!is.numeric(x[[chr]])) stop(paste(chr, "column should be numeric. Do you have 'X', 'Y', 'MT', etc? If so change to numbers and try again."))
   if (!is.numeric(x[[bp]])) stop(paste(bp, "column should be numeric."))
   if (!is.numeric(x[[p]])) stop(paste(p, "column should be numeric."))
-
+  
   # Create a new data.frame with columns called CHR, BP, and P.
   d <- data.frame(CHR = x[[chr]], BP = x[[bp]], P = x[[p]])
   # str(d)
@@ -155,50 +145,38 @@ manhattanr <- function(x,
     # str(d)
     colnames(d)[which(colnames(d) == "SNP")] <- snp
   }
-
+  
   if (!missing(gene)) {
     # d <- transform(d, GENE = x[[gene]])
     d[["GENE"]] <- x[[gene]]
     colnames(d)[which(colnames(d) == "GENE")] <- gene
   }
-
+  
   if (!missing(annotation1)) {
     # d <- transform(d, ANNOTATION1 = x[[annotation1]])
     d[["ANNOTATION1"]] <- x[[annotation1]]
     colnames(d)[which(colnames(d) == "ANNOTATION1")] <- annotation1
   }
-
+  
   if (!missing(annotation2)) {
     # d <- transform(d, ANNOTATION2 = x[[annotation2]])
     d[["ANNOTATION2"]] <- x[[annotation2]]
     colnames(d)[which(colnames(d) == "ANNOTATION2")] <- annotation2
   }
   
-  if (!missing(annotation3)) {
-    # d <- transform(d, ANNOTATION2 = x[[annotation3]])
-    d[["ANNOTATION3"]] <- x[[annotation3]]
-    colnames(d)[which(colnames(d) == "ANNOTATION3")] <- annotation3
-  }
-  
-  if (!missing(annotation4)) {
-    # d <- transform(d, ANNOTATION2 = x[[annotation4]])
-    d[["ANNOTATION4"]] <- x[[annotation4]]
-    colnames(d)[which(colnames(d) == "ANNOTATION4")] <- annotation4
-  }
-
   # Set positions, ticks, and labels for plotting
   ## Sort and keep only values where is numeric.
   d <- subset(d, (is.numeric(CHR) & is.numeric(BP) & is.numeric(P)))
   d <- d[order(d$CHR, d$BP), ]
-
+  
   if (logp) {
     d$logp <- -log10(d$P)
   } else {
     d$logp <- d$P
   }
-
+  
   d$pos <- NA
-
+  
   # Fixes the bug where one chromosome is missing by adding a sequential index column.
   d$index <- NA
   ind <- 0
@@ -206,7 +184,7 @@ manhattanr <- function(x,
     ind <- ind + 1
     d[d$CHR==i,]$index <- ind
   }
-
+  
   # This section sets up positions and ticks. Ticks should be placed in the
   # middle of a chromosome. The a new pos column is added that keeps a running
   # sum of the positions of each successive chromsome. For example:
@@ -242,18 +220,16 @@ manhattanr <- function(x,
     xlabel = 'Chromosome'
     labs <- unique(d$CHR)
   }
-
+  
   manhattanr <- list(data = d, xlabel = xlabel, ticks = ticks, labs = labs,
                      nchr = nchr, pName = p,
                      snpName = if (missing(snp)) NA else snp,
                      geneName = if (missing(gene)) NA else gene,
                      annotation1Name = if (missing(annotation1)) NA else annotation1,
-                     annotation2Name = if (missing(annotation2)) NA else annotation2,
-                     annotation3Name = if (missing(annotation3)) NA else annotation3,
-                     annotation4Name = if (missing(annotation4)) NA else annotation4)
-
+                     annotation2Name = if (missing(annotation2)) NA else annotation2)
+  
   class(manhattanr) <- "manhattanr"
-
+  
   manhattanr
-
+  
 }
