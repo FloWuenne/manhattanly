@@ -248,7 +248,7 @@ manhattanr <- function(x,
                      snpName = if (missing(snp)) NA else snp,
                      geneName = if (missing(gene)) NA else gene,
                      annotation1Name = if (missing(annotation1)) NA else annotation1,
-                     annotation2Name = if (missing(annotation2)) NA else annotation2
+                     annotation2Name = if (missing(annotation2)) NA else annotation2,
                      annotation3Name = if (missing(annotation3)) NA else annotation3,
                      annotation4Name = if (missing(annotation4)) NA else annotation4)
 
